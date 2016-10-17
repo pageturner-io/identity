@@ -1,5 +1,5 @@
 class MockAuth
-  attr_reader :provider, :uid, :info
+  attr_reader :provider, :uid, :info, :credentials
 
   class Info
     attr_reader :email
@@ -9,9 +9,18 @@ class MockAuth
     end
   end
 
-  def initialize(provider:, uid:, email:)
-    @provider = provider
-    @uid      = uid
-    @info     = Info.new(email: email)
+  class Credentials
+    attr_reader :token
+
+    def initialize(token:)
+      @token = token
+    end
+  end
+
+  def initialize(provider:, uid:, email:, token:)
+    @provider     = provider
+    @uid          = uid
+    @info         = Info.new(email: email)
+    @credentials  = Credentials.new(token: token)
   end
 end

@@ -6,12 +6,14 @@ module Github
       property :uid
       property :email
       property :password
+      property :github_oauth_token
 
       validation do
         required(:provider).filled
         required(:uid).filled
         required(:email).filled
         required(:password).filled
+        required(:github_oauth_token).filled
       end
     end
 
@@ -32,10 +34,11 @@ module Github
 
     def params!(params)
       {
-        provider: params.provider,
-        uid:      params.uid,
-        email:    params.info.email,
-        password: Devise.friendly_token[0, 20]
+        provider:           params.provider,
+        uid:                params.uid,
+        email:              params.info.email,
+        password:           Devise.friendly_token[0, 20],
+        github_oauth_token: params.credentials.token
       }
     end
 
