@@ -258,6 +258,29 @@ Devise.setup do |config|
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
 
+  config.warden do |manager|
+    manager.strategies.add(:jwt, Devise::Strategies::JsonWebToken)
+    manager.default_strategies(scope: :user).unshift :jwt
+  end
+
+  Warden::Manager.after_set_user do |user, auth, opts|
+    scope = opts[:scope]
+    auth.cookies["#{scope}.session"] = {
+      value: JWTWrapper.encode(
+        id:                 user.id,
+        github_oauth_token: user.github_oauth_token
+      ),
+      expires: Rails.application.secrets.jwt_expiration_hours.hours.from_now,
+      domain: ENV["SSO_DOMAIN"],
+      httponly: true
+    }
+  end
+
+  Warden::Manager.before_logout do |user, auth, opts|
+    scope = opts[:scope]
+    auth.cookies["#{scope}.session"] = nil
+  end
+
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine
   # is mountable, there are some extra configurations to be taken into account.
