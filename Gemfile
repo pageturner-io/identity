@@ -31,6 +31,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'devise'
+gem 'jwt'
 gem 'omniauth-github'
 
 gem 'trailblazer'
@@ -56,6 +57,8 @@ end
 group :test do
   gem 'rspec-rails'
   gem 'rspec-its'
+  gem 'show_me_the_cookies'
+  gem 'timecop'
 
   # code coverage
   gem "simplecov",                 require: false

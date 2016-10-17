@@ -54,4 +54,10 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.include ShowMeTheCookies, type: :feature
+
+  config.after :each, type: :feature do
+    expire_cookies
+  end
 end

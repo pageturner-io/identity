@@ -14,11 +14,13 @@ describe Github::Authenticate do
     let(:provider)      { "github" }
     let(:uid)           { "12345" }
     let(:email_address) { "foo@bar.com" }
+    let(:token)         { SecureRandom.hex }
     let(:auth) do
       MockAuth.new(
         provider: provider,
         uid:      uid,
-        email:    email_address
+        email:    email_address,
+        token:    token
       )
     end
 
@@ -34,13 +36,30 @@ describe Github::Authenticate do
     end
 
     context "when the user already exists" do
+      let(:old_auth) do
+        MockAuth.new(
+          provider: provider,
+          uid:      uid,
+          email:    email_address,
+          token:    SecureRandom.hex
+        )
+      end
+
       before :each do
-        subject
+        described_class.(old_auth)
       end
 
       it "does not create another user" do
         expect { subject }.not_to change{ User.count }
       end
+
+      it "refreshes their github oauth token" do
+        expect(subject.github_oauth_token).to eq(token)
+      end
+    end
+
+    it "stores a github oauth token" do
+      expect(subject.github_oauth_token).to eq(token)
     end
 
   end
@@ -48,7 +67,7 @@ describe Github::Authenticate do
   context "with invalid data" do
     subject { described_class.run(auth) }
 
-    let(:auth) { MockAuth.new(provider: "", uid: "", email: "") }
+    let(:auth) { MockAuth.new(provider: "", uid: "", email: "", token: "") }
 
     it "returns an invalid operation" do
       result, _ = subject
