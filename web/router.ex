@@ -9,14 +9,24 @@ defmodule Identity.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_auth do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", Identity do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :browser_auth]
 
     get "/", PageController, :index
+    get "/register", UserController, :new
+    post "/register", UserController, :create
+    get "/login", AuthController, :login
+    post "/login", AuthController, :login
+    delete "/logout", AuthController, :logout
   end
 
   # Other scopes may use custom stacks.

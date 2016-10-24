@@ -38,3 +38,5 @@ config :identity, Identity.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   pool_size: 10
+
+import_config "dev.secret.exs"
