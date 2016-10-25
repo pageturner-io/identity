@@ -37,7 +37,12 @@ config :guardian, Guardian,
   verify_issuer: true,
   secret_key: System.get_env("GUARDIAN_SECRET_KEY"),
   serializer: Identity.Auth.GuardianSerializer,
-  hooks: Identity.Auth.GuardianHooks
+  hooks: Identity.Auth.Hooks
+
+config :guardian_db, GuardianDb,
+  repo: Identity.Repo,
+  schema_name: "tokens",
+  sweep_interval: 120 # minutes
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

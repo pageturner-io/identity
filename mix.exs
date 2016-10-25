@@ -40,6 +40,7 @@ defmodule Identity.Mixfile do
      {:cowboy, "~> 1.0"},
      {:guardian, "~> 0.13"},
      {:comeonin, "~> 2.5"},
+     {:guardian_db, "~> 0.7"},
      {:ex_machina, "~> 1.0", only: :test}]
   end
 

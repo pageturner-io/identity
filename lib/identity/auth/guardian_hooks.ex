@@ -1,5 +1,17 @@
-defmodule Identity.Auth.GuardianHooks do
+defmodule Identity.Auth.Hooks do
   use Guardian.Hooks
+
+  def after_encode_and_sign(resource, type, claims, jwt) do
+    GuardianDb.after_encode_and_sign(resource, type, claims, jwt)
+  end
+
+  def on_verify(claims, jwt) do
+    GuardianDb.on_verify(claims, jwt)
+  end
+
+  def on_revoke(claims, jwt) do
+    GuardianDb.on_revoke(claims, jwt)
+  end
 
   def after_sign_in(conn, location) do
     token = Guardian.Plug.current_token(conn, location)
