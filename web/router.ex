@@ -10,7 +10,7 @@ defmodule Identity.Router do
   end
 
   pipeline :browser_auth do
-    plug Guardian.Plug.VerifySession
+    plug Identity.Plug.VerifyCookie
     plug Guardian.Plug.LoadResource
   end
 

@@ -3,6 +3,11 @@ defmodule Identity.AuthControllerTest do
 
   import Identity.Factory
 
+  defp cookie_config do
+    Application.get_env(:identity, Identity.Auth)
+    |> Dict.get(:cookie)
+  end
+
   setup do
     {:ok, %{
         user: insert(:user)
@@ -31,6 +36,21 @@ defmodule Identity.AuthControllerTest do
     }
 
     assert Guardian.Plug.current_resource(conn) != nil
+  end
+
+  test "POST /login with valid sets an SSO cookie with the user's token", %{conn: conn, user: user} do
+    conn = post conn, "/login", %{
+      user: %{
+        email: user.email,
+        password: user.password,
+      }
+    }
+
+    cookie_name = cookie_config[:name]
+
+    assert conn.resp_cookies[cookie_name][:value] == Guardian.Plug.current_token(conn)
+    assert conn.resp_cookies[cookie_name][:max_age] == cookie_config[:max_age]
+    assert conn.resp_cookies[cookie_name][:domain] == cookie_config[:domain]
   end
 
   test "POST /login with valid data redirects to the index", %{conn: conn, user: user} do
@@ -66,8 +86,11 @@ defmodule Identity.AuthControllerTest do
     conn = guardian_login(conn, user)
     |> delete("/logout")
 
+    cookie_name = cookie_config[:name]
+
     assert Guardian.Plug.current_resource(conn) == nil
     assert redirected_to(conn) =~ page_path(conn, :index)
+    assert conn.cookies[cookie_name] == nil
   end
 
 end
