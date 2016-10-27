@@ -4,7 +4,7 @@ defmodule Identity.Mixfile do
   def project do
     [app: :identity,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -19,7 +19,7 @@ defmodule Identity.Mixfile do
   def application do
     [mod: {Identity, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin]]
+                    :phoenix_ecto, :postgrex, :comeonin, :guardian_db]]
   end
 
   # Specifies which paths to compile per environment.

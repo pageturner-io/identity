@@ -9,10 +9,4 @@ config :identity, Identity.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-# Configure your database
-config :identity, Identity.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  url: System.get_env("DATABASE_URL"),
-  pool: Ecto.Adapters.SQL.Sandbox
-
 import_config "test.secret.exs"

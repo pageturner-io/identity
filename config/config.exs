@@ -35,7 +35,7 @@ config :guardian, Guardian,
   issuer: "PageturnerIdentity.#{Mix.env}",
   ttl: { 30, :days },
   verify_issuer: true,
-  secret_key: System.get_env("GUARDIAN_SECRET_KEY"),
+  secret_key: {:system, "GUARDIAN_SECRET_KEY"},
   serializer: Identity.Auth.GuardianSerializer,
   hooks: Identity.Auth.Hooks
 
