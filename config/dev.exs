@@ -36,7 +36,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :identity, Identity.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: System.get_env("DATABASE_URL"),
+  url: {:system, "DATABASE_URL"},
   pool_size: 10
 
 import_config "dev.secret.exs"
