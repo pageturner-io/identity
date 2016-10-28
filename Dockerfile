@@ -1,36 +1,31 @@
-FROM phusion/passenger-ruby23:0.9.19
+FROM elixir:1.3
 
 MAINTAINER Bruno Abrantes <bruno@brunoabrantes.com>
 
-# Set correct environment variables.
-ENV HOME /root
+ENV PORT 8888
+ENV MIX_ENV prod
+ENV HOST localhost
+ENV DEBIAN_FRONTEND noninteractive
 
-# Use baseimage-docker's init process.
-CMD ["/sbin/my_init"]
+EXPOSE 8888
 
-# Enable nginx and Passenger
-RUN rm -f /etc/service/nginx/down
+ADD . /app
 
-# Remove the default site
-RUN rm /etc/nginx/sites-enabled/default
+WORKDIR /app
 
-# Create virtual host
-ADD docker/vhost.conf /etc/nginx/sites-enabled/identity.conf
-ADD docker/env.conf /etc/nginx/main.d/app-env.conf
+RUN rm -rf deps node_modules
 
-# Prepare folders
-RUN mkdir /home/app/identity
-RUN mkdir /sites
+RUN apt-get update
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
 
-# Run Bundle in a cache efficient way
-WORKDIR /tmp
-ADD Gemfile /tmp/
-ADD Gemfile.lock /tmp/
-RUN bundle install
+RUN mix local.hex --force
+RUN mix local.rebar --force_ssl
 
-# Add our app
-ADD . /home/app/identity
-RUN chown -R app:app /home/app
+RUN mix deps.get
+RUN npm install
+RUN npm run deploy
+RUN mix compile
+RUN mix phoenix.digest
 
-# Clean up when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+CMD ["mix", "phoenix.server"]
