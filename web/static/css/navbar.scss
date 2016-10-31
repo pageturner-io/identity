@@ -1,0 +1,44 @@
+@import "bootstrap/mixins";
+@import "variables";
+
+body {
+  margin-top: $navbar-height + 20px;
+}
+
+[data-component="navbar"] {
+  border-bottom: 4px solid darken($navbar-default-bg, 50);
+  height: $navbar-height;
+  padding-top: 5px;
+
+  .navbar-brand {
+    background: url("/images/logo.svg") no-repeat top left;
+    background-size: $navbar-width-large $navbar-height - 20px;
+    position: relative;
+    top: 2px;
+    left: 15px;
+    width: $navbar-width-large;
+
+    &.brand-small {
+      width: $navbar-width-small;
+      left: -10px;
+    }
+  }
+
+  img {
+    height: $navbar-height - 30px;
+    position: relative;
+    top: -3px;
+  }
+
+  .links {
+    margin-right: 20px;
+
+    .btn {
+      margin: 10px 0 0 0;
+    }
+
+    .login {
+      margin-right: 10px;
+    }
+  }
+}

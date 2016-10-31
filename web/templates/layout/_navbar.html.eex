@@ -1,0 +1,24 @@
+<nav role="navigation" class="navbar navbar-default navbar-fixed-top" data-component="navbar">
+  <div class="container-fluid">
+    <div class="navbar-left brand">
+      <a class="hidden-xs navbar-brand brand-large text-hide" href="/">
+        Pageturner
+      </a>
+
+      <a class="visible-xs navbar-brand brand-small text-hide" href="/">
+        Pageturner
+      </a>
+    </div>
+
+    <div class="navbar-right links">
+      <div class="pull-right">
+        <%= if Guardian.Plug.current_resource(@conn) do %>
+        <%= link "Logout", to: auth_path(@conn, :logout), method: :delete, class: "btn btn-default navbar-btn pull-right" %>
+        <% else %>
+        <%= link "Login", to: auth_path(@conn, :login), class: "btn btn-ghost navbar-btn pull-left login" %>
+        <%= link "Register", to: user_path(@conn, :new), class: "btn btn-primary navbar-btn pull-left" %>
+        <% end %>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</nav>
