@@ -1,0 +1,9 @@
+@import "bootstrap/mixins";
+
+.form-control {
+  padding: 20px 15px;
+
+  &:focus {
+    @include box-shadow(none);
+  }
+}

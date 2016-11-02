@@ -1,7 +1,7 @@
-$icon-font-path: "/fonts/"; /* use fonts from priv/static/fonts/ */
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
-
 @import "variables";
 @import "bootstrap"; /* imports node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss */
+@import "typography";
+@import "forms";
 @import "buttons";
 @import "navbar";
+@import "pages/login";

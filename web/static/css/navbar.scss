@@ -6,22 +6,17 @@ body {
 }
 
 [data-component="navbar"] {
-  border-bottom: 4px solid darken($navbar-default-bg, 50);
+  border-bottom: 4px solid $navbar-border-color;
   height: $navbar-height;
   padding-top: 5px;
 
   .navbar-brand {
-    background: url("/images/logo.svg") no-repeat top left;
-    background-size: $navbar-width-large $navbar-height - 20px;
+    background: url("/images/logo-inverted.svg") no-repeat top left;
+    background-size: $logo-size;
     position: relative;
-    top: 2px;
+    top: 4px;
     left: 15px;
-    width: $navbar-width-large;
-
-    &.brand-small {
-      width: $navbar-width-small;
-      left: -10px;
-    }
+    width: $logo-size;
   }
 
   img {
@@ -33,12 +28,26 @@ body {
   .links {
     margin-right: 20px;
 
-    .btn {
-      margin: 10px 0 0 0;
+    a {
+      color: #FFF;
     }
 
-    .login {
-      margin-right: 10px;
+    .help {
+      position: relative;
+      top: 18px;
+      margin: 0 10px;
+      color: transparentize(#FFF, 0.5);
+    }
+
+    .btn {
+      margin: 10px 0 0 0;
+      background: darken($navbar-default-bg, 10);
+      border-color: darken($navbar-default-bg, 10);
+
+      &:hover {
+        background: darken($navbar-default-bg, 20);
+        border-color: darken($navbar-default-bg, 20);
+      }
     }
   }
 }

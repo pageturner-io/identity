@@ -1,11 +1,17 @@
+@import "bootstrap/mixins";
 @import "variables";
 
 .btn {
   padding: 8px 16px;
+  @include transition(background-color .1s linear);
 }
 
 .btn-ghost {
   background: transparent;
   color: $brand-primary;
   border: 1px solid $brand-primary;
+
+  &:hover {
+    color: darken($brand-primary, 10);
+  }
 }
