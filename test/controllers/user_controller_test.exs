@@ -16,7 +16,7 @@ defmodule Identity.UserControllerTest do
 
   test "GET /register renders signup page", %{conn: conn} do
     conn = get conn, "/register"
-    assert html_response(conn, 200) =~ "Register"
+    assert html_response(conn, 200) =~ "Sign up"
   end
 
   test "GET /register with a logged in user redirects to index", %{conn: conn, user: user} do
