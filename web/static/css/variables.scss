@@ -1,0 +1,39 @@
+@import "bootstrap/variables";
+
+$icon-font-path: "/fonts/"; /* use fonts from priv/static/fonts/ */
+
+/* Colors */
+$gray-dark: #333;
+$text-color: $gray-dark;
+
+/* Brand */
+$brand-primary: #784BAA;
+$font-family-sans-serif: "Source Sans Pro", sans-serif;
+$font-family-base: $font-family-sans-serif;
+
+/* Links */
+$link-color: $brand-primary;
+$link-hover-color: $link-color;
+
+/* Navbar */
+$navbar-height: 70px;
+$navbar-default-bg: $brand-primary;
+$navbar-default-link-color: $brand-primary;
+$navbar-border-color: lighten($navbar-default-bg, 20);
+$logo-height: $navbar-height - 25px;
+$logo-width: 250px;
+$logo-width-small: 70px;
+
+/* Buttons */
+$btn-font-weight: bold;
+
+$btn-primary-color: #FFF;
+$btn-primary-bg: $brand-primary;
+$btn-primary-border: $btn-primary-bg;
+
+/* Forms */
+$input-border-radius: 3px;
+$input-border-radius-small: 2px;
+$input-border-radius-large: 5px;
+
+$input-border-focus: lighten($brand-primary, 20);

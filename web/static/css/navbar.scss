@@ -1,0 +1,62 @@
+@import "bootstrap/mixins";
+@import "variables";
+
+body {
+  margin-top: $navbar-height + 20px;
+}
+
+[data-component="navbar"] {
+  border-bottom: 4px solid $navbar-border-color;
+  height: $navbar-height;
+  padding-top: 5px;
+
+  .navbar-brand {
+    background: url("/images/logo-inverted.svg") no-repeat top left;
+    background-size: $logo-width $logo-height;
+    position: relative;
+    top: 4px;
+    left: 0;
+    width: $logo-width-small;
+    height: $logo-width-small;
+
+    @media (min-width: $screen-xs-min) {
+      background-size: $logo-width $logo-height;
+      top: 4px;
+      left: 15px;
+      width: $logo-width;
+      height: $logo-height;
+    }
+  }
+
+  img {
+    height: $navbar-height - 30px;
+    position: relative;
+    top: -3px;
+  }
+
+  .links {
+    margin-right: 20px;
+
+    a {
+      color: #FFF;
+    }
+
+    .help {
+      position: relative;
+      top: 18px;
+      margin: 0 10px;
+      color: transparentize(#FFF, 0.5);
+    }
+
+    .btn {
+      margin: 10px 0 0 0;
+      background: darken($navbar-default-bg, 10);
+      border-color: darken($navbar-default-bg, 10);
+
+      &:hover {
+        background: darken($navbar-default-bg, 20);
+        border-color: darken($navbar-default-bg, 20);
+      }
+    }
+  }
+}

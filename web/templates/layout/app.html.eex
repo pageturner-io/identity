@@ -12,27 +12,25 @@
   </head>
 
   <body>
-    <div class="container">
+    <div class="container-fluid">
       <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-            <%= if Guardian.Plug.current_resource(@conn) do %>
-            <li><%= link "Logout", to: auth_path(@conn, :logout), method: :delete %></li>
-            <% else %>
-            <li><%= link "Login", to: auth_path(@conn, :login) %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <span class="logo"></span>
+        <%= render "_navbar.html", conn: @conn %>
       </header>
 
+      <%
+      info = get_flash(@conn, :info)
+      error = get_flash(@conn, :error)
+      %>
+      <%= if info do %>
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <% end %>
+      <%= if error do %>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <% end %>
 
-      <main role="main">
+      <div role="main">
         <%= render @view_module, @view_template, assigns %>
-      </main>
+      </div>
 
     </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
