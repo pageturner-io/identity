@@ -12,11 +12,20 @@ body {
 
   .navbar-brand {
     background: url("/images/logo-inverted.svg") no-repeat top left;
-    background-size: $logo-size;
+    background-size: $logo-width $logo-height;
     position: relative;
     top: 4px;
-    left: 15px;
-    width: $logo-size;
+    left: 0;
+    width: $logo-width-small;
+    height: $logo-width-small;
+
+    @media (min-width: $screen-xs-min) {
+      background-size: $logo-width $logo-height;
+      top: 4px;
+      left: 15px;
+      width: $logo-width;
+      height: $logo-height;
+    }
   }
 
   img {

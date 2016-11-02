@@ -17,12 +17,12 @@ $link-hover-color: $link-color;
 
 /* Navbar */
 $navbar-height: 70px;
-$navbar-width-large: 300px;
-$navbar-width-small: 55px;
 $navbar-default-bg: $brand-primary;
 $navbar-default-link-color: $brand-primary;
 $navbar-border-color: lighten($navbar-default-bg, 20);
-$logo-size: $navbar-height - 15px;
+$logo-height: $navbar-height - 25px;
+$logo-width: 250px;
+$logo-width-small: 70px;
 
 /* Buttons */
 $btn-font-weight: bold;
