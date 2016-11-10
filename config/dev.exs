@@ -47,4 +47,4 @@ config :guardian, Guardian,
   ttl: { 30, :days },
   verify_issuer: true,
   secret_key: "tMNnxbTs4Ave+n3D9vEO92kBZSpQq/D/njTbeElV+bRdTSMhfnqdOLfTqHKvbkZ1",
-  serializer: Identity.Auth.GuardianSerialize
+  serializer: Identity.Auth.GuardianSerializer

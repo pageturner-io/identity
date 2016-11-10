@@ -1,5 +1,6 @@
 defmodule Identity.Router do
   use Identity.Web, :router
+  require Ueberauth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -27,6 +28,14 @@ defmodule Identity.Router do
     get "/login", AuthController, :login
     post "/login", AuthController, :login
     delete "/logout", AuthController, :logout
+  end
+
+  scope "/auth", Identity do
+    pipe_through [:browser, :browser_auth]
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    post "/:provider/callback", AuthController, :callback
   end
 
   # Other scopes may use custom stacks.

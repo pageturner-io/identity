@@ -6,7 +6,7 @@
     </div>
   </header>
   <article class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-6">
       <%= form_for @changeset, auth_path(@conn, :login), [novalidate: true], fn f -> %>
         <div class="form-group">
           <%= email_input f, :email, class: "form-control", placeholder: "Email Address" %>
@@ -20,6 +20,12 @@
           <%= submit "Login", class: "btn btn-primary" %>
         </div>
       <% end %>
+    </div>
+    <div class="col-xs-6">
+      <a class="btn btn-primary col-xs-12" href="<%= auth_path(@conn, :request, "github") %>">
+        <i class='fa fa-github'></i>
+        Github
+      </a>
     </div>
   </article>
   <footer>
