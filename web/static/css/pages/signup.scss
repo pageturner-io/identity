@@ -1,5 +1,9 @@
+@import "../variables";
+
 .page.signup {
-  .auth, .oauth {
-    min-height: 430px;
+  @media (min-width: $screen-sm-min) {
+    .auth, .oauth {
+      min-height: 430px;
+    }
   }
 }
