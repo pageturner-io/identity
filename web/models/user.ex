@@ -1,4 +1,8 @@
 defmodule Identity.User do
+  @moduledoc """
+  The User model.
+  """
+
   use Identity.Web, :model
 
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]

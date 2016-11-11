@@ -1,4 +1,6 @@
 defmodule Identity.Auth.Hooks do
+  @moduledoc false
+
   use Guardian.Hooks
 
   def after_encode_and_sign(resource, type, claims, jwt) do
@@ -31,8 +33,12 @@ defmodule Identity.Auth.Hooks do
     ])
   end
 
-  defp cookie_config do
+  defp config do
     Application.get_env(:identity, Identity.Auth)
+  end
+
+  defp cookie_config do
+    config
     |> Dict.get(:cookie)
   end
 

@@ -1,4 +1,8 @@
 defmodule Identity do
+  @moduledoc """
+  The main Identity application
+  """
+
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html

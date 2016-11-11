@@ -1,13 +1,19 @@
 defmodule Identity.UserFromAuth do
+  @moduledoc """
+  Provides a valid User from authentication data.
+  """
 
   alias Identity.{User, Authorization}
+
+  @random_password_length 64
 
   def get(%{email: email, password: password}, repo) do
     case repo.get_by(User, email: email) do
       %User{} = user ->
-        cond do
-          Comeonin.Bcrypt.checkpw(password, user.encrypted_password) -> {:ok, user}
-          true -> {:error, :not_found}
+        if Comeonin.Bcrypt.checkpw(password, user.encrypted_password) do
+          {:ok, user}
+        else
+          {:error, :not_found}
         end
       nil -> {:error, :not_found}
     end
@@ -15,7 +21,7 @@ defmodule Identity.UserFromAuth do
   def get(%{provider: :github} = auth, repo) do
     case repo.get_by(Authorization, uid: auth.uid) do
       %Authorization{} = authorization ->
-        authorization = if (authorization.expires_at && authorization.expires_at < Guardian.Utils.timestamp) do
+        authorization = if authorization.expires_at && authorization.expires_at < Guardian.Utils.timestamp do
           replace_authorization(authorization, auth, repo)
         else
           authorization
@@ -30,7 +36,9 @@ defmodule Identity.UserFromAuth do
     case repo.transaction(fn ->
       user = user_from_authorization(authorization, repo)
       repo.delete!(authorization)
-      new_authorization(user, auth)
+
+      user
+      |> new_authorization(auth)
       |> repo.insert!
       |> repo.preload(:user)
     end) do
@@ -55,7 +63,7 @@ defmodule Identity.UserFromAuth do
 
     case repo.insert(changeset) do
       {:ok, user} ->
-        case new_authorization(user, auth) |> repo.insert do
+        case user |> new_authorization(auth) |> repo.insert do
           {:ok, _auth}      -> {:ok, user}
           {:error, _reason} -> {:error, :not_found}
         end
@@ -64,7 +72,10 @@ defmodule Identity.UserFromAuth do
   end
 
   defp random_password do
-    :crypto.strong_rand_bytes(64) |> Base.encode64 |> binary_part(0, 64)
+    @random_password_length
+    |> :crypto.strong_rand_bytes
+    |> Base.encode64
+    |> binary_part(0, @random_password_length)
   end
 
   defp new_authorization(user, auth) do

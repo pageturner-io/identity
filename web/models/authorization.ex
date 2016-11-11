@@ -1,4 +1,8 @@
 defmodule Identity.Authorization do
+  @moduledoc """
+  The Authorization model.
+  """
+
   use Identity.Web, :model
 
   schema "authorizations" do

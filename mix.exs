@@ -56,7 +56,8 @@ defmodule Identity.Mixfile do
      {:guardian_db, "~> 0.7"},
      {:ueberauth, "~> 0.4"},
      {:ueberauth_github, "~> 0.4"},
-     {:ex_machina, "~> 1.0", only: :test}]
+     {:ex_machina, "~> 1.0", only: :test},
+     {:credo, "~> 0.3", only: [:dev, :test]}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
