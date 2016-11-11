@@ -15,3 +15,20 @@
     color: darken($brand-primary, 10);
   }
 }
+
+.btn-github {
+  background: lighten($github-color, 10);
+  border-color: lighten($github-color, 10);
+
+  i {
+    float: left;
+    font-size: 1.8em;
+    position: relative;
+    top: -.1em;
+  }
+
+  &:hover, &:active, &:focus, &:active:focus {
+    background: $github-color;
+    border-color: $github-color;
+  }
+}

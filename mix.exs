@@ -18,8 +18,21 @@ defmodule Identity.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Identity, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin, :guardian_db]]
+     applications: [
+       :phoenix,
+       :phoenix_pubsub,
+       :phoenix_html,
+       :cowboy,
+       :logger,
+       :gettext,
+       :phoenix_ecto,
+       :postgrex,
+       :comeonin,
+       :guardian_db,
+       :ueberauth,
+       :ueberauth_github
+      ]
+    ]
   end
 
   # Specifies which paths to compile per environment.
@@ -41,6 +54,8 @@ defmodule Identity.Mixfile do
      {:guardian, "~> 0.13"},
      {:comeonin, "~> 2.5"},
      {:guardian_db, "~> 0.7"},
+     {:ueberauth, "~> 0.4"},
+     {:ueberauth_github, "~> 0.4"},
      {:ex_machina, "~> 1.0", only: :test}]
   end
 

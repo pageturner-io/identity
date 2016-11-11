@@ -5,25 +5,33 @@
       <p class="text-muted">Sign in, look around, build some pages.</p>
     </div>
   </header>
-  <article class="row">
-    <div class="col-xs-12">
-      <%= form_for @changeset, auth_path(@conn, :login), [novalidate: true], fn f -> %>
-        <div class="form-group">
-          <%= email_input f, :email, class: "form-control", placeholder: "Email Address" %>
-        </div>
+  <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+    <article class="row">
+      <div class="col-sm-6 col-xs-12 auth">
+        <%= form_for @changeset, auth_path(@conn, :login), [novalidate: true], fn f -> %>
+          <div class="form-group">
+            <%= email_input f, :email, class: "form-control", placeholder: "Email Address" %>
+          </div>
 
-        <div class="form-group">
-          <%= password_input f, :password, class: "form-control", placeholder: "Password" %>
-        </div>
+          <div class="form-group">
+            <%= password_input f, :password, class: "form-control", placeholder: "Password" %>
+          </div>
 
-        <div class="form-group">
-          <%= submit "Login", class: "btn btn-primary" %>
-        </div>
-      <% end %>
-    </div>
-  </article>
-  <footer>
-    <p class="text-muted">Don't have an account yet?</p>
-    <p><%= link "Sign up now!", to: user_path(@conn, :new) %>
-  </footer>
+          <div class="form-group">
+            <%= submit "Login", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-sm-6 col-xs-12 oauth">
+        <a class="btn btn-block btn-primary btn-github" href="<%= auth_path(@conn, :request, "github") %>">
+          <i class='fa fa-github fa-5'></i>
+          Sign in with Github
+        </a>
+      </div>
+    </article>
+    <footer>
+      <p class="text-muted">Don't have an account yet?</p>
+      <p><%= link "Sign up now!", to: user_path(@conn, :new) %>
+    </footer>
+  </div>
 </div>

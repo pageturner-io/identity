@@ -1,7 +1,9 @@
 @import "variables";
 @import "bootstrap"; /* imports node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss */
+@import "font-awesome"; /* imports node_modules/font-awesome */
 @import "typography";
 @import "forms";
 @import "buttons";
 @import "navbar";
 @import "pages/login";
+@import "pages/signup";

@@ -7,8 +7,6 @@ defmodule Identity.Authorization do
     field :token, :string
     field :refresh_token, :string
     field :expires_at, :integer
-    field :password, :string, virtual: true
-    field :password_confirmation, :string, virtual: true
 
     belongs_to :user, Identity.User
 
