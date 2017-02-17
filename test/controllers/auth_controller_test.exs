@@ -3,12 +3,16 @@ defmodule Identity.AuthControllerTest do
 
   import Identity.Factory
 
+  @hivent Application.get_env(:identity, :hivent)
+
   defp cookie_config do
     Application.get_env(:identity, Identity.Auth)
     |> Dict.get(:cookie)
   end
 
   setup do
+    @hivent.Emitter.Cache.clear
+
     {:ok, %{
         user: insert(:user)
       }
@@ -38,7 +42,7 @@ defmodule Identity.AuthControllerTest do
     assert Guardian.Plug.current_resource(conn) != nil
   end
 
-  test "POST /login with valid sets an SSO cookie with the user's token", %{conn: conn, user: user} do
+  test "POST /login with valid data sets an SSO cookie with the user's token", %{conn: conn, user: user} do
     conn = post conn, "/login", %{
       user: %{
         email: user.email,
@@ -51,6 +55,21 @@ defmodule Identity.AuthControllerTest do
     assert conn.resp_cookies[cookie_name][:value] == Guardian.Plug.current_token(conn)
     assert conn.resp_cookies[cookie_name][:max_age] == cookie_config[:max_age]
     assert conn.resp_cookies[cookie_name][:domain] == cookie_config[:domain]
+  end
+
+  test "POST /login with valid data emits an event with the user's token", %{conn: conn, user: user} do
+    conn = post conn, "/login", %{
+      user: %{
+        email: user.email,
+        password: user.password,
+      }
+    }
+
+    event = @hivent.Emitter.Cache.last
+
+    assert event.meta.name == "user:signed_in"
+    assert event.payload.user.id == user.id
+    assert event.payload.user.authentication_token == Guardian.Plug.current_token(conn)
   end
 
   test "POST /login with valid data redirects to the index", %{conn: conn, user: user} do
@@ -83,14 +102,22 @@ defmodule Identity.AuthControllerTest do
   end
 
   test "DELETE /logout with a logged in user logs out that user", %{conn: conn, user: user} do
-    conn = guardian_login(conn, user)
-    |> delete("/logout")
+    conn = guardian_login(conn, user) |> delete("/logout")
 
     cookie_name = cookie_config[:name]
 
     assert Guardian.Plug.current_resource(conn) == nil
     assert redirected_to(conn) =~ page_path(conn, :index)
     assert conn.cookies[cookie_name] == nil
+  end
+
+  test "DELETE /logout with a logged in user emits an event with the user's id", %{conn: conn, user: user} do
+    guardian_login(conn, user) |> delete("/logout")
+
+    event = @hivent.Emitter.Cache.last
+
+    assert event.meta.name == "user:signed_out"
+    assert event.payload.user.id == user.id
   end
 
 end

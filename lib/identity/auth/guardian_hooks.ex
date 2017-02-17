@@ -3,6 +3,8 @@ defmodule Identity.Auth.Hooks do
 
   use Guardian.Hooks
 
+  @hivent Application.get_env(:identity, :hivent)
+
   def after_encode_and_sign(resource, type, claims, jwt) do
     GuardianDb.after_encode_and_sign(resource, type, claims, jwt)
   end
@@ -17,6 +19,14 @@ defmodule Identity.Auth.Hooks do
 
   def after_sign_in(conn, location) do
     token = Guardian.Plug.current_token(conn, location)
+    user = Guardian.Plug.current_resource(conn)
+
+    @hivent.emit("user:signed_in", %{
+      user: %{
+        id: user.id,
+        authentication_token: token
+      }
+    }, %{version: 1})
 
     conn
     |> Plug.Conn.put_resp_cookie(name, token, [
@@ -26,6 +36,14 @@ defmodule Identity.Auth.Hooks do
   end
 
   def before_sign_out(conn, _location) do
+    user = Guardian.Plug.current_resource(conn)
+
+    @hivent.emit("user:signed_out", %{
+      user: %{
+        id: user.id,
+      }
+    }, %{version: 1})
+
     conn
     |> Plug.Conn.delete_resp_cookie(name, [
       domain: domain,
