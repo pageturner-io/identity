@@ -21,5 +21,8 @@ config :guardian, Guardian,
   secret_key: "tMNnxbTs4Ave+n3D9vEO92kBZSpQq/D/njTbeElV+bRdTSMhfnqdOLfTqHKvbkZ1",
   serializer: Identity.Auth.GuardianSerializer
 
+# Configure Hivent
+config :identity, :hivent, Hivent.Memory
+
 # Print only warnings and errors during test
 config :logger, level: :warn
