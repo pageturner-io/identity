@@ -21,12 +21,14 @@ defmodule Identity.Auth.Hooks do
     token = Guardian.Plug.current_token(conn, location)
     user = Guardian.Plug.current_resource(conn)
 
-    @hivent.emit("user:signed_in", %{
+    @hivent.emit("identity:user:signed_in", %{
       user: %{
         id: user.id,
+        email: user.email,
+        name: user.name,
         authentication_token: token
       }
-    }, %{version: 1})
+    }, %{version: 1, key: user.id})
 
     conn
     |> Plug.Conn.put_resp_cookie(name, token, [
@@ -38,11 +40,11 @@ defmodule Identity.Auth.Hooks do
   def before_sign_out(conn, _location) do
     user = Guardian.Plug.current_resource(conn)
 
-    @hivent.emit("user:signed_out", %{
+    @hivent.emit("identity:user:signed_out", %{
       user: %{
         id: user.id,
       }
-    }, %{version: 1})
+    }, %{version: 1, key: user.id})
 
     conn
     |> Plug.Conn.delete_resp_cookie(name, [

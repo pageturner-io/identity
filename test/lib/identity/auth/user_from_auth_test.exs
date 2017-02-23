@@ -60,11 +60,11 @@ defmodule Identity.UserFromAuthTest do
   end
 
   test "with a Github authorization for an existing user returns that user", %{user: persisted_user, auth: auth} do
-    before_users = user_count
-    before_authorizations = authorization_count
+    before_users = user_count()
+    before_authorizations = authorization_count()
     {:ok, user} = UserFromAuth.get(auth, Repo)
-    after_users = user_count
-    after_authorizations = authorization_count
+    after_users = user_count()
+    after_authorizations = authorization_count()
 
     assert after_users == before_users
     assert after_authorizations == before_authorizations
@@ -75,13 +75,13 @@ defmodule Identity.UserFromAuthTest do
     authorization = Ecto.Changeset.change(authorization, expires_at: Guardian.Utils.timestamp - 500)
                     |> Repo.update!
 
-    before_users = user_count
-    before_authorizations = authorization_count
+    before_users = user_count()
+    before_authorizations = authorization_count()
     {:ok, user_from_auth} = UserFromAuth.get(auth, Repo)
 
     assert user_from_auth.id == user.id
-    assert before_users == user_count
-    assert authorization_count == before_authorizations
+    assert before_users == user_count()
+    assert authorization_count() == before_authorizations
     auth2 = Repo.one(Ecto.assoc(user, :authorizations))
     refute auth2.id == authorization.id
   end
@@ -101,9 +101,9 @@ defmodule Identity.UserFromAuthTest do
       }
     }
 
-    before_users = user_count
+    before_users = user_count()
     {:ok, user} = UserFromAuth.get(auth, Repo)
-    after_users = user_count
+    after_users = user_count()
 
     assert after_users == (before_users + 1)
 
@@ -125,9 +125,9 @@ defmodule Identity.UserFromAuthTest do
       }
     }
 
-    before_authorizations = authorization_count
+    before_authorizations = authorization_count()
     {:ok, user} = UserFromAuth.get(auth, Repo)
-    after_authorizations = authorization_count
+    after_authorizations = authorization_count()
 
     assert after_authorizations == (before_authorizations + 1)
 

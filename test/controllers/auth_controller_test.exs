@@ -7,7 +7,7 @@ defmodule Identity.AuthControllerTest do
 
   defp cookie_config do
     Application.get_env(:identity, Identity.Auth)
-    |> Dict.get(:cookie)
+    |> Keyword.fetch!(:cookie)
   end
 
   setup do
@@ -50,11 +50,11 @@ defmodule Identity.AuthControllerTest do
       }
     }
 
-    cookie_name = cookie_config[:name]
+    cookie_name = cookie_config()[:name]
 
     assert conn.resp_cookies[cookie_name][:value] == Guardian.Plug.current_token(conn)
-    assert conn.resp_cookies[cookie_name][:max_age] == cookie_config[:max_age]
-    assert conn.resp_cookies[cookie_name][:domain] == cookie_config[:domain]
+    assert conn.resp_cookies[cookie_name][:max_age] == cookie_config()[:max_age]
+    assert conn.resp_cookies[cookie_name][:domain] == cookie_config()[:domain]
   end
 
   test "POST /login with valid data emits an event with the user's token", %{conn: conn, user: user} do
@@ -67,9 +67,11 @@ defmodule Identity.AuthControllerTest do
 
     event = @hivent.Emitter.Cache.last
 
-    assert event.meta.name == "user:signed_in"
+    assert event.meta.name == "identity:user:signed_in"
     assert event.payload.user.id == user.id
     assert event.payload.user.authentication_token == Guardian.Plug.current_token(conn)
+    assert event.payload.user.email == user.email
+    assert event.payload.user.name == user.name
   end
 
   test "POST /login with valid data redirects to the index", %{conn: conn, user: user} do
@@ -104,7 +106,7 @@ defmodule Identity.AuthControllerTest do
   test "DELETE /logout with a logged in user logs out that user", %{conn: conn, user: user} do
     conn = guardian_login(conn, user) |> delete("/logout")
 
-    cookie_name = cookie_config[:name]
+    cookie_name = cookie_config()[:name]
 
     assert Guardian.Plug.current_resource(conn) == nil
     assert redirected_to(conn) =~ page_path(conn, :index)
@@ -116,7 +118,7 @@ defmodule Identity.AuthControllerTest do
 
     event = @hivent.Emitter.Cache.last
 
-    assert event.meta.name == "user:signed_out"
+    assert event.meta.name == "identity:user:signed_out"
     assert event.payload.user.id == user.id
   end
 
