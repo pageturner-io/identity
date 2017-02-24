@@ -4,7 +4,8 @@ defmodule Identity.Repo.Migrations.CreateUser do
   def change do
     execute("CREATE EXTENSION citext;")
 
-    create table(:users) do
+    create table(:users, primary_key: false) do
+      add :id, :binary_id, primary_key: true
       add :name, :string
       add :email, :citext
 
