@@ -4,7 +4,7 @@ defmodule Identity.AuthorizationTest do
   alias Identity.Authorization
   alias Identity.Repo
 
-  @valid_attrs %{expires_at: 42, provider: "some content", user_id: 1, refresh_token: "some content", token: "some content", uid: "some content"}
+  @valid_attrs %{expires_at: 42, provider: "some content", user_id: Ecto.UUID.generate(), refresh_token: "some content", token: "some content", uid: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
@@ -18,7 +18,7 @@ defmodule Identity.AuthorizationTest do
   end
 
   test "inserting a changeset with an invalid user_id" do
-    {:error, changeset} = Authorization.changeset(%Authorization{}, %{@valid_attrs | user_id: 404})
+    {:error, changeset} = Authorization.changeset(%Authorization{}, %{@valid_attrs | user_id: Ecto.UUID.generate()})
     |> Repo.insert
 
     refute changeset.valid?
