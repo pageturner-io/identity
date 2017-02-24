@@ -17,7 +17,8 @@ config :identity, Identity.Endpoint,
   cache_static_manifest: "priv/static/manifest.json",
   server: true,
   root: ".",
-  version: Mix.Project.config[:version]
+  version: Mix.Project.config[:version],
+  secret_key_base: {:system, "SECRET_KEY_BASE"}
 
 config :identity, Identity.Repo,
   adapter: Ecto.Adapters.Postgres,
@@ -64,6 +65,10 @@ config :logger, level: :info
 #
 #     config :identity, Identity.Endpoint, server: true
 #
+
+# Configure Guardian
+config :guardian, Guardian,
+  secret_key: {:system, "GUARDIAN_SECRET_KEY"}
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
