@@ -13,8 +13,6 @@ ADD . /app
 
 WORKDIR /app
 
-ADD docker/entrypoint entrypoint.sh
-
 RUN rm -rf deps node_modules
 
 RUN apt-get update
@@ -29,6 +27,8 @@ RUN npm install
 RUN npm run deploy
 RUN mix compile
 RUN mix phoenix.digest
+
+COPY docker/entrypoint.sh /usr/local/bin
 
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["mix", "phoenix.server"]
