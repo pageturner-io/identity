@@ -18,7 +18,7 @@ config :identity, Identity.Endpoint,
   server: true,
   root: ".",
   version: Mix.Project.config[:version],
-  secret_key_base: {:system, "SECRET_KEY_BASE"}
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 config :identity, Identity.Repo,
   adapter: Ecto.Adapters.Postgres,
