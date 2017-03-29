@@ -66,6 +66,12 @@ config :logger, level: :info
 #     config :identity, Identity.Endpoint, server: true
 #
 
+# Configure Auth
+config :identity, Identity.Auth,
+  cookie: [domain: "identity.pageturner.io",
+    max_age: 60*60*24*14,
+    name: "pageturner_identity"]
+
 # Configure Guardian
 config :guardian, Guardian,
   secret_key: System.get_env("GUARDIAN_SECRET_KEY")
