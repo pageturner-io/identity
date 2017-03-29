@@ -28,4 +28,7 @@ RUN npm run deploy
 RUN mix compile
 RUN mix phoenix.digest
 
+COPY docker/entrypoint.sh /usr/local/bin
+
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["mix", "phoenix.server"]
