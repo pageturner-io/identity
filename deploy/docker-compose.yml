@@ -1,0 +1,79 @@
+version: "3.1"
+
+services:
+  web:
+    image: pageturner/identity
+    networks:
+      - proxy
+      - hivent_front
+      - front
+      - back
+    secrets:
+      - guardian_secret_key
+      - secret_key_base
+      - github_client_id
+      - github_client_secret
+    environment:
+      DATABASE_URL: postgres://postgres@identity_db/identity
+      POOL_SIZE: 10
+      HIVENT_URL: redis://hivent_redis:6379
+      GUARDIAN_SECRET_KEY_FILE: /run/secrets/guardian_secret_key
+      SECRET_KEY_BASE_FILE: /run/secrets/secret_key_base
+      GITHUB_CLIENT_ID_FILE: /run/secrets/github_client_id
+      GITHUB_CLIENT_SECRET_FILE: /run/secrets/github_client_secret
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      update_config:
+        parallelism: 1
+        delay: 5s
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.serviceDomain=identity.pageturner.io,www.identity.pageturner.io
+        - com.df.servicePath=/
+        - com.df.port=8888
+        - com.df.httpsOnly=true
+        - com.df.xForwardedProto=true
+
+  migrator:
+    image: pageturner/identity
+    command: mix ecto.setup
+    networks:
+      - back
+    environment:
+      DATABASE_URL: postgres://postgres@identity_db/identity
+      POOL_SIZE: 1
+      HIVENT_URL: redis://hivent_redis:6379
+    deploy:
+      restart_policy:
+        condition: none
+
+  db:
+    image: postgres:9.6
+    volumes:
+      - "/mnt/data/identity/postgresql:/var/lib/postgresql/data"
+    networks:
+      - back
+    deploy:
+      restart_policy:
+        condition: any
+
+networks:
+  front:
+  back:
+  hivent_front:
+    external: true
+  proxy:
+    external: true
+
+secrets:
+  guardian_secret_key:
+    file: ./deploy/secrets/guardian_secret_key
+  secret_key_base:
+    file: ./deploy/secrets/secret_key_base
+  github_client_id:
+    file: ./deploy/secrets/github_client_id
+  github_client_secret:
+    file: ./deploy/secrets/github_client_secret
