@@ -68,7 +68,7 @@ config :logger, level: :info
 
 # Configure Auth
 config :identity, Identity.Auth,
-  cookie: [domain: "identity.pageturner.io",
+  cookie: [domain: "pageturner.io",
     max_age: 60*60*24*14,
     name: "pageturner_identity"]
 
