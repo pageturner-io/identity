@@ -28,7 +28,7 @@ defmodule Identity.Auth.Hooks do
         name: user.name,
         authentication_token: token
       }
-    }, %{version: 1, key: user.id})
+    }, %{version: 1, key: user.id |> :erlang.crc32})
 
     conn
     |> Plug.Conn.put_resp_cookie(name, token, [
@@ -44,7 +44,7 @@ defmodule Identity.Auth.Hooks do
       user: %{
         id: user.id,
       }
-    }, %{version: 1, key: user.id})
+    }, %{version: 1, key: user.id |> :erlang.crc32})
 
     conn
     |> Plug.Conn.delete_resp_cookie(name, [
