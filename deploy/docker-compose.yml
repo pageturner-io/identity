@@ -9,10 +9,14 @@ services:
       - front
       - back
     secrets:
-      - guardian_secret_key
-      - secret_key_base
-      - github_client_id
-      - github_client_secret
+      - source: pageturner_guardian_secret_key
+        target: guardian_secret_key
+      - source: identity_secret_key_base
+        target: secret_key_base
+      - source: identity_github_client_id
+        target: github_client_id
+      - source: identity_github_client_secret
+        target: github_client_secret
     environment:
       DATABASE_URL: postgres://postgres@identity_db/identity
       POOL_SIZE: 10
@@ -69,11 +73,11 @@ networks:
     external: true
 
 secrets:
-  guardian_secret_key:
-    file: ./deploy/secrets/guardian_secret_key
-  secret_key_base:
-    file: ./deploy/secrets/secret_key_base
-  github_client_id:
-    file: ./deploy/secrets/github_client_id
-  github_client_secret:
-    file: ./deploy/secrets/github_client_secret
+  pageturner_guardian_secret_key:
+    external: true
+  identity_secret_key_base:
+    external: true
+  identity_github_client_id:
+    external: true
+  identity_github_client_secret:
+    external: true
