@@ -21,7 +21,7 @@ defmodule Identity.Plug.ReturnUrl do
   defp handle_redirect(conn, {nil, _user}), do: conn
   defp handle_redirect(conn, {_return_url, nil}), do: conn
   defp handle_redirect(conn, {return_url, %Identity.User{}}) do
-    put_session(conn, :return_url, return_url)
+    put_session(conn, :return_url, nil)
     |> Phoenix.Controller.redirect(external: return_url)
     |> halt
   end

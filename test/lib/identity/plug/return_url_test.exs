@@ -85,5 +85,19 @@ defmodule Identity.Plug.ReturnUrlTest do
 
       assert redirected_to(conn) =~ return_url
     end
+
+    test "after redirecting cleans out the \"return_url\" from the session store", %{user: user} do
+      return_url = "https://example.com"
+
+      conn = build_conn(:get, "/foo")
+      |> Plug.Session.call(@session)
+      |> fetch_session
+      |> Guardian.Plug.sign_in(user, :token, [])
+      |> put_session(:return_url, return_url)
+      |> put_secret_key_base(nil)
+      |> Identity.Plug.ReturnUrl.redirect_to_return_url(%{})
+
+      refute get_session(conn, :return_url)
+    end
   end
 end
