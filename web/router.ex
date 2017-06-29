@@ -1,6 +1,7 @@
 defmodule Identity.Router do
   use Identity.Web, :router
   require Ueberauth
+  import Identity.Plug.ReturnUrl
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -15,12 +16,17 @@ defmodule Identity.Router do
     plug Guardian.Plug.LoadResource
   end
 
+  pipeline :return_url do
+    plug :store_return_url
+    plug :redirect_to_return_url
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", Identity do
-    pipe_through [:browser, :browser_auth]
+    pipe_through [:browser, :browser_auth, :return_url]
 
     get "/", PageController, :index
     get "/register", UserController, :new
@@ -31,7 +37,7 @@ defmodule Identity.Router do
   end
 
   scope "/auth", Identity do
-    pipe_through [:browser, :browser_auth]
+    pipe_through [:browser, :browser_auth, :return_url]
 
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
